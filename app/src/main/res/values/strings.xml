@@ -1,3 +1,46 @@
 <resources>
     <string name="app_name">ReadingAppV2</string>
+
+    <string-array name="book_names">
+        <item>Война и мир</item>
+        <item>1984</item>
+        <item>Преступление и наказание</item>
+        <item>Мастер и Маргарита</item>
+        <item>Гордость и предубеждение</item>
+        <item>Анна Каренина</item>
+        <item>Маленький принц</item>
+        <item>Улисс</item>
+        <item>Гарри Поттер и философский камень</item>
+        <item>Властелин колец</item>
+    </string-array>
+
+    <string-array name="book_size">
+        <item>12 МБ</item>
+        <item>5 МБ</item>
+        <item>8 МБ</item>
+        <item>10 МБ</item>
+        <item>6 МБ</item>
+        <item>7 МБ</item>
+        <item>3 МБ</item>
+        <item>15 МБ</item>
+        <item>9 МБ</item>
+        <item>20 МБ</item>
+    </string-array>
+
+    <string-array name="book_format">
+        <item>PDF</item>
+    </string-array>
+
+    <string-array name="book_author">
+        <item>Лев Толстой</item>
+        <item>Джордж Оруэлл</item>
+        <item>Фёдор Достоевский</item>
+        <item>Михаил Булгаков</item>
+        <item>Джейн Остин</item>
+        <item>Лев Толстой</item>
+        <item>Антуан де Сент-Экзюпери</item>
+        <item>Джеймс Джойс</item>
+        <item>Джоан Роулинг</item>
+        <item>Дж. Р. Р. Толкин</item>
+    </string-array>
 </resources>
