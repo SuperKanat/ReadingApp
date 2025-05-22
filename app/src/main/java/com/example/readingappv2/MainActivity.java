@@ -2,6 +2,7 @@ package com.example.readingappv2;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -13,6 +14,7 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.io.File;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
@@ -43,17 +45,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setUpBookModels() {
-        String[] bookNames = getResources().getStringArray(R.array.book_names);
-        String[] bookFormat = getResources().getStringArray(R.array.book_format);
-        String[] bookSize = getResources().getStringArray(R.array.book_size);
-        String[] bookAuthor = getResources().getStringArray(R.array.book_author);
+        // Замените этот код на реальное получение PDF-файлов
+        File downloadsDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+        File[] pdfFiles = downloadsDir.listFiles((dir, name) -> name.toLowerCase().endsWith(".pdf"));
 
-        for (int i = 0; i < bookNames.length; i++) {
-            bookModels.add(new BookModel(bookNames[i],
-                    bookFormat[0],
-                    bookSize[i],
-                    bookAuthor[i],
-                    bookImage));
+        if (pdfFiles != null) {
+            for (File pdfFile : pdfFiles) {
+                BookModel book = BookModel.fromPdfFile(this, pdfFile, R.drawable.default_book_cover);
+                bookModels.add(book);
+            }
         }
     }
+
 }
