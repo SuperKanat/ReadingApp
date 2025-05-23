@@ -45,16 +45,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setUpBookModels() {
-        // Замените этот код на реальное получение PDF-файлов
-        File downloadsDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-        File[] pdfFiles = downloadsDir.listFiles((dir, name) -> name.toLowerCase().endsWith(".pdf"));
+        String[] bookNames = getResources().getStringArray(R.array.book_names);
+        String[] bookFormat = getResources().getStringArray(R.array.book_format);
+        String[] bookSize = getResources().getStringArray(R.array.book_size);
+        String[] bookAuthor = getResources().getStringArray(R.array.book_author);
 
-        if (pdfFiles != null) {
-            for (File pdfFile : pdfFiles) {
-                BookModel book = BookModel.fromPdfFile(this, pdfFile, R.drawable.default_book_cover);
-                bookModels.add(book);
-            }
+        for (int i = 0; i < bookNames.length; i++) {
+            bookModels.add(new BookModel(bookNames[i],
+                    bookFormat[0],
+                    bookSize[i],
+                    bookAuthor[i],
+                    bookImage));
         }
     }
-
 }

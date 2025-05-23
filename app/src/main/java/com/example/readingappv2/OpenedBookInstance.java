@@ -13,7 +13,6 @@ import com.github.barteksc.pdfviewer.PDFView;
 import java.io.File;
 
 public class OpenedBookInstance extends AppCompatActivity {
-    private PDFView pdfView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,14 +25,7 @@ public class OpenedBookInstance extends AppCompatActivity {
             return insets;
         });
 
-        pdfView = findViewById(R.id.firstxml);
-        String filePath = getIntent().getStringExtra("BOOK_PATH");
-
-        File file = new File(filePath);
-        pdfView.fromFile(file)
-                .enableSwipe(true)
-                .swipeHorizontal(false)
-                .enableDoubletap(true)
-                .load();
+        PDFView pdfView = findViewById(R.id.firstxml);
+        pdfView.fromAsset("first.pdf").load();
     }
 }

@@ -26,8 +26,6 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.MyViewHolder> 
         this.bookModels = bookModels;
     }
 
-
-
     @NonNull
     @Override
     public BookAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -45,7 +43,6 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.MyViewHolder> 
 
         holder.imageView.setOnClickListener(v -> {
             Intent intent = new Intent(context, OpenedBookInstance.class);
-            intent.putExtra("BOOK_PATH", bookModels.get(position).getFilePath());
             context.startActivity(intent);
         });
 
