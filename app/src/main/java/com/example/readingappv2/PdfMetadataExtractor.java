@@ -2,6 +2,7 @@ package com.example.readingappv2;
 
 import android.content.Context;
 import android.net.Uri;
+import android.util.Log;
 
 import com.tom_roush.pdfbox.android.PDFBoxResourceLoader;
 import com.tom_roush.pdfbox.pdmodel.PDDocument;
@@ -24,17 +25,18 @@ public class PdfMetadataExtractor {
     public static PdfMetadata extract(Context context, Uri pdfUri) {
         PdfMetadata metadata = new PdfMetadata();
         try (InputStream inputStream = context.getContentResolver().openInputStream(pdfUri)) {
-            byte[] pdfBytes = readAllBytes(inputStream);
-            PDDocument document = PDDocument.load(pdfBytes);
+            PDFBoxResourceLoader.init(context); // Инициализация PDFBox
 
+            PDDocument document = PDDocument.load(inputStream);
             PDDocumentInformation info = document.getDocumentInformation();
+
             metadata.title = info.getTitle();
             metadata.author = info.getAuthor();
             metadata.pageCount = document.getNumberOfPages();
 
             document.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.e("PDF_Extractor", "Error extracting metadata", e);
         }
         return metadata;
     }

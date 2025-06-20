@@ -3,6 +3,7 @@ package com.example.readingappv2;
 import android.content.Context;
 import android.content.Intent;
 import android.media.Image;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,7 +46,14 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.MyViewHolder> 
 
         holder.imageView.setOnClickListener(v -> {
             Intent intent = new Intent(context, OpenedBookInstance.class);
-            intent.putExtra("BOOK_PATH", bookModels.get(position).getFilePath());
+
+            // Для Android 10+ передаем URI, для старых версий - путь
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                intent.putExtra("BOOK_URI", bookModels.get(position).getFilePath());
+            } else {
+                intent.putExtra("BOOK_PATH", bookModels.get(position).getFilePath());
+            }
+
             context.startActivity(intent);
         });
 

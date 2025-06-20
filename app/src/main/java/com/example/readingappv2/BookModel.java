@@ -3,7 +3,11 @@ package com.example.readingappv2;
 
 
 import android.content.Context;
+import android.database.Cursor;
 import android.net.Uri;
+import android.provider.OpenableColumns;
+import android.text.TextUtils;
+import android.util.Log;
 
 import java.io.File;
 import java.text.DecimalFormat;
@@ -27,20 +31,55 @@ public class BookModel {
 
     public static BookModel fromPdfFile(Context context, File pdfFile, int defaultImage) {
         String size = formatFileSize(pdfFile.length());
+        PdfMetadataExtractor.PdfMetadata metadata = new PdfMetadataExtractor.PdfMetadata();
 
-        PdfMetadataExtractor.PdfMetadata metadata =
-                PdfMetadataExtractor.extract(context, Uri.fromFile(pdfFile));
+        try {
+            metadata = PdfMetadataExtractor.extract(context, Uri.fromFile(pdfFile));
+        } catch (Exception e) {
+            Log.e("BookModel", "Error extracting metadata: " + e.getMessage());
+        }
 
         return new BookModel(
-                (metadata.title != null && !metadata.title.isEmpty()) ?
-                        metadata.title : pdfFile.getName(),
+                !TextUtils.isEmpty(metadata.title) ? metadata.title : pdfFile.getName(),
                 "PDF",
                 size,
-                (metadata.author != null && !metadata.author.isEmpty()) ?
-                        metadata.author : "Unknown Author",
+                !TextUtils.isEmpty(metadata.author) ? metadata.author : "Unknown Author",
                 defaultImage,
                 pdfFile.getAbsolutePath()
         );
+    }
+
+    public static BookModel fromMediaStoreUri(Context context, Uri uri, String name, long size, int defaultImage) {
+        String sizeStr = formatFileSize(size);
+        PdfMetadataExtractor.PdfMetadata metadata = PdfMetadataExtractor.extract(context, uri);
+
+        // Получаем имя файла из Uri, если не передано
+        String fileName = name;
+        if (fileName == null || fileName.isEmpty()) {
+            fileName = getFileNameFromUri(context, uri);
+        }
+
+        return new BookModel(
+                getValidString(metadata.title, name),
+                "PDF",
+                sizeStr,
+                getValidString(metadata.author, "Unknown Author"),
+                defaultImage,
+                uri.toString()  // Сохраняем URI как строку
+        );
+    }
+
+    private static String getFileNameFromUri(Context context, Uri uri) {
+        String result = null;
+        if (uri.getScheme().equals("content")) {
+            try (Cursor cursor = context.getContentResolver().query(
+                    uri, null, null, null, null)) {
+                if (cursor != null && cursor.moveToFirst()) {
+                    result = cursor.getString(cursor.getColumnIndexOrThrow(OpenableColumns.DISPLAY_NAME));
+                }
+            }
+        }
+        return result != null ? result : uri.getLastPathSegment();
     }
 
     private static String getValidString(String value, String fallback) {
